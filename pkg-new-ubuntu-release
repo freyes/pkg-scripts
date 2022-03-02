@@ -48,3 +48,8 @@ gbp import-orig --no-interactive --merge-mode=replace ../${package}_${version}.o
 dch -i
 sed -i "1s/1ubuntu1/0ubuntu1/" debian/changelog
 debcommit -a
+
+LPUSER=$(git config --global gitubuntu.lpuser)
+if [ ! -z "${LPUSER}" ]; then
+  git remote add ${LPUSER} git+ssh://${LPUSER}@git.launchpad.net/~${LPUSER}/ubuntu/+source/${package}
+done
