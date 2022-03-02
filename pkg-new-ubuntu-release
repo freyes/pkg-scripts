@@ -23,7 +23,16 @@ package=$1
 version=$2
 branch=$3
 
-git clone lp:~ubuntu-openstack-dev/ubuntu/+source/$package || git clone lp:~ubuntu-server-dev/ubuntu/+source/$package
+if [ ! -d $package ]; then
+  git clone lp:~ubuntu-openstack-dev/ubuntu/+source/$package || git clone lp:~ubuntu-server-dev/ubuntu/+source/$package
+else
+  pushd $package
+  for b in pristine-tar upstream $branch; do
+    git checkout $b
+    git pull --rebase
+  done
+  popd
+fi
 cd $package
 
 git checkout pristine-tar
